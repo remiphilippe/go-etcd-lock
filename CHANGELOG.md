@@ -24,7 +24,7 @@
 
 ## v5.0.2
 
-* Package is now github.com/Scalingo/go-etcd-lock/v5 conforming to go modules semantic
+* Package is now github.com/remiphilippe/go-etcd-lock/v5 conforming to go modules semantic
 
 ## v5.0.1
 
