@@ -76,8 +76,9 @@ type Lock interface {
 
 type EtcdLock struct {
 	*sync.Mutex
-	mutex   *concurrency.Mutex
-	session *concurrency.Session
+	mutex    *concurrency.Mutex
+	session  *concurrency.Session
+	released bool
 }
 
 func (locker *EtcdLocker) Acquire(key string, ttl int) (Lock, error) {
@@ -134,7 +135,12 @@ func (locker *EtcdLocker) acquire(key string, ttl int, wait bool) (Lock, error) 
 		}
 	}
 
-	lock := &EtcdLock{mutex: mutex, Mutex: &sync.Mutex{}, session: session}
+	lock := &EtcdLock{
+		mutex:    mutex,
+		Mutex:    &sync.Mutex{},
+		session:  session,
+		released: false,
+	}
 
 	go func() {
 		time.AfterFunc(time.Duration(ttl)*time.Second, func() {
